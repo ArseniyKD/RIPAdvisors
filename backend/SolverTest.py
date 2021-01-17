@@ -25,23 +25,23 @@ ctt = coursesToTake
 # Vector of results
 partialSchedules = []
 
-# while np.sum(ctt) != 0:
-# Create a binary vector of the schedule to find through optimization
-currSched = cp.Variable(6, boolean=True)
-#coursesLeft = cp.Variable(ctt)
-#nextSem = cp.Variable(nacm)
-#tcg = cp.Variable(timeConflictGraph)
-tmp = np.array([[1,0,0,0,0,0], [0,1,0,0,0,0], [0,0,0,0,0,0], [0,0,0,1,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]])
-constraints = []
-constraints += [timeConflictGraph @ currSched == 0]
-constraints += [cp.sum(currSched) <= 2]
-#constraints += [1 <= cp.sum(nacm @ currSched)]
+while np.sum(ctt) != 0:
+    # Create a binary vector of the schedule to find through optimization
+    currSched = cp.Variable(6, boolean=True)
+    constraints = []
+    constraints += [ cp.sum(cp.multiply(np.array([1,0,0,1,0,0]), currSched)) <= 1]
+    constraints += [cp.sum(currSched) <= 2]
 
-objective = cp.Maximize( cp.sum( currSched - ctt ) + cp.sum(nacm @ currSched) )
+    objective = cp.Maximize( cp.sum( currSched - ctt ) + cp.sum(cp.multiply(currSched, np.array([1,2,0,1,0,0]))) )
 
-problem = cp.Problem( objective, constraints )
-problem.solve(solver=cp.GLPK_MI)
-curSched = currSched.value
+    problem = cp.Problem( objective, constraints )
+    t = problem.solve(solver=cp.GLPK_MI)
+    curSched = currSched.value
 
-print( curSched )
+    print( curSched )
+    print(t)    
 
+    
+    
+    
+    
