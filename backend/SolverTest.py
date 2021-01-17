@@ -20,7 +20,7 @@ cprg = coursePreReqGraph
 nacm = nextAvailCoursesMat
 ctt = coursesToTake
 
-print( nacm, ctt, timeConflictGraph)
+#print( nacm, ctt, timeConflictGraph)
 
 # Vector of results
 partialSchedules = []
